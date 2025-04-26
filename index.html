@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Redux Counter App - Single File</title>
+</head>
+<body>
+  <h1>Redux Counter App</h1>
+  <div id="counter-value"></div>
+  <button id="increment-btn">Increment</button>
+  <button id="decrement-btn">Decrement</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.1/redux.min.js"></script>
+
+  <script>
+    const INCREMENT = 'INCREMENT';
+    const DECREMENT = 'DECREMENT';
+
+    function increment() {
+      return { type: INCREMENT };
+    }
+
+    function decrement() {
+      return { type: DECREMENT };
+    }
+
+    const initialState = {
+      count: 0,
+    };
+
+    function counterReducer(state = initialState, action) {
+      switch (action.type) {
+        case INCREMENT:
+          return { ...state, count: state.count + 1 };
+        case DECREMENT:
+          return { ...state, count: state.count - 1 };
+        default:
+          return state;
+      }
+    }
+
+    const store = Redux.createStore(counterReducer);
+
+    const counterValueDiv = document.getElementById('counter-value');
+    const incrementBtn = document.getElementById('increment-btn');
+    const decrementBtn = document.getElementById('decrement-btn');
+
+    function render() {
+      const state = store.getState();
+      counterValueDiv.innerHTML = `<pre>${JSON.stringify(state, null, 2)}</pre>`;
+    }
+
+    render();
+
+    store.subscribe(render);
+
+    incrementBtn.addEventListener('click', () => {
+      store.dispatch(increment());
+    });
+
+    decrementBtn.addEventListener('click', () => {
+      store.dispatch(decrement());
+    });
+  </script>
+</body>
+</html>
